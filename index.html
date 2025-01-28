@@ -1,0 +1,1466 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Daily Checklist for Deangelo</title>
+  <style>
+    /* Reset and Basic Styles */
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+    body {
+      font-family: 'Comic Sans MS', cursive, sans-serif;
+      background-color: #f0f8ff;
+      color: #333;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+    }
+
+    /* Landing Page */
+    #landing-page {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      background-color: #e6f7ff;
+    }
+    #good-morning-button {
+      background-color: #4caf50;
+      color: white;
+      padding: 15px 30px;
+      font-size: 1.5em;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: background-color 0.3s;
+    }
+    #good-morning-button:hover {
+      background-color: #45a049;
+    }
+
+    /* Header */
+    h1 {
+      text-align: center;
+      color: #ff6347;
+      margin-bottom: 10px;
+      font-size: 2em;
+    }
+
+    .date {
+      text-align: center;
+      font-size: 1.2em;
+      color: #555;
+      margin-bottom: 20px;
+    }
+
+    /* Task Table */
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 20px;
+      overflow-x: auto;
+    }
+    th, td {
+      border: 2px solid #ffdab9;
+      padding: 15px;
+      text-align: center;
+      font-size: 1em;
+      min-width: 100px;
+    }
+    th {
+      background-color: #ffe4b5;
+      color: #ff4500;
+    }
+    tr:nth-child(even) {
+      background-color: #fffaf0;
+    }
+    tr:hover {
+      background-color: #f5deb3;
+    }
+
+    /* Buttons */
+    button {
+      padding: 0.6em 1.2em;
+      font-size: 1em;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: transform 0.2s;
+    }
+    button:active {
+      transform: scale(0.95);
+    }
+    .start-button {
+      background-color: #4caf50;
+      color: white;
+    }
+    .start-button:disabled {
+      background-color: #a5d6a7;
+      cursor: not-allowed;
+    }
+    .end-button {
+      background-color: #f44336;
+      color: white;
+    }
+    .end-button:disabled {
+      background-color: #ef9a9a;
+      cursor: not-allowed;
+    }
+    #reset-button {
+      background-color: #ff9800;
+      color: white;
+      padding: 0.8em 1.5em;
+      margin-bottom: 20px;
+      display: block;
+      margin-left: auto;
+      margin-right: auto;
+      border-radius: 8px;
+      font-size: 1em;
+    }
+    #reset-button:hover {
+      background-color: #fb8c00;
+    }
+
+    /* Points and Levels */
+    .points-level {
+      text-align: center;
+      margin-bottom: 20px;
+      display: flex;
+      justify-content: center;
+      gap: 2em;
+      flex-wrap: wrap;
+    }
+    .points-level h3 {
+      font-size: 1.2em;
+      color: #ff4500;
+    }
+    #current-level {
+      font-weight: bold;
+      color: #1e90ff;
+      font-size: 1.2em;
+    }
+
+    /* Bedtime Button */
+    #bedtime-container {
+      text-align: center;
+      margin: 30px 0;
+    }
+    #bedtime-button {
+      background-color: #6a5acd; /* Slate Blue */
+      color: white;
+      padding: 1em 2em;
+      border-radius: 10px;
+      font-size: 1.2em;
+      cursor: pointer;
+      transition: background-color 0.3s;
+    }
+    #bedtime-button:disabled {
+      background-color: #a0a0a0;
+      cursor: not-allowed;
+    }
+    #bedtime-button:hover:not(:disabled) {
+      background-color: #5b4fc9;
+    }
+
+    /* Progress Bars */
+    #progress-container {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 20px;
+      margin-bottom: 40px;
+      width: 100%;
+    }
+    .progress-box {
+      width: 45%;
+      max-width: 300px;
+      text-align: center;
+      background-color: #fff8dc;
+      padding: 15px;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+      position: relative;
+      height: 100px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+    .progress-box h3 {
+      margin-bottom: 10px;
+      font-size: 1.1em;
+      color: #333;
+    }
+    .progress-bar {
+      width: 100%;
+      background-color: #e0e0e0;
+      border-radius: 25px;
+      overflow: hidden;
+      height: 25px;
+    }
+    .progress-fill {
+      height: 100%;
+      background-color: #4caf50;
+      width: 0%;
+      transition: width 0.5s ease-in-out;
+    }
+    .progress-label {
+      margin-top: 5px;
+      font-size: 0.9em;
+      color: #555;
+    }
+
+    /* Roulette */
+    #roulette-container {
+      display: none;
+      text-align: center;
+      margin-bottom: 20px;
+      width: 100%;
+      max-width: 350px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+    .wheel-wrapper {
+      position: relative;
+      width: 100%;
+      padding-top: 100%; /* 1:1 Aspect Ratio */
+      overflow: hidden;
+    }
+    .wheel-pointer {
+      position: absolute;
+      top: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 0;
+      height: 0;
+      border-left: 15px solid transparent;
+      border-right: 15px solid transparent;
+      border-bottom: 25px solid #333;
+      z-index: 999;
+    }
+    #roulette-wheel {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      border: 8px solid #333;
+      border-radius: 50%;
+      overflow: hidden;
+      transition: transform 6s cubic-bezier(0.33, 1, 0.68, 1);
+    }
+    .slice {
+      position: absolute;
+      width: 50%;
+      height: 50%;
+      top: 50%;
+      left: 50%;
+      transform-origin: 0% 0%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-weight: bold;
+      font-size: 1em;
+      text-align: center;
+      padding: 5px;
+      box-sizing: border-box;
+    }
+    .slice1 { background-color: #f44336; }
+    .slice2 { background-color: #4caf50; }
+    .slice3 { background-color: #2196f3; }
+    .slice4 { background-color: #ff9800; }
+
+    #spin-button {
+      font-size: 1.2em;
+      padding: 0.8em 1.5em;
+      background-color: #28a745;
+      color: #fff;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      margin-top: 20px;
+      transition: background-color 0.3s;
+      width: 100%;
+      max-width: 200px;
+    }
+    #spin-button:hover {
+      background-color: #218838;
+    }
+
+    /* Export Buttons */
+    .export-buttons {
+      text-align: center;
+      margin-bottom: 40px;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 10px;
+      /* Added margin-top to prevent overlapping */
+      margin-top: 20px;
+      width: 100%;
+    }
+    .blue-button {
+      background-color: #007BFF;
+      color: white;
+      padding: 0.6em 1.2em;
+      margin: 5px;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: background-color 0.3s;
+      border: none;
+      font-size: 1em;
+    }
+    .blue-button:hover {
+      background-color: #0056b3;
+    }
+
+    /* Encouragement Message */
+    #encouragement-message {
+      display: none;
+      text-align: center;
+      font-size: 1.5em;
+      color: #32cd32;
+      margin-bottom: 20px;
+      animation: fadeInOut 3s;
+    }
+    @keyframes fadeInOut {
+      0% { opacity: 0; }
+      10% { opacity: 1; }
+      90% { opacity: 1; }
+      100% { opacity: 0; }
+    }
+
+    /* Highlight Winning Slice */
+    .winning-slice {
+      border: 4px solid #ffd700;
+    }
+
+    /* Star Rating Styles */
+    .star-rating {
+      display: flex;
+      gap: 5px;
+      justify-content: center;
+      margin-top: 10px;
+    }
+    .star-rating span {
+      font-size: 2em; /* Increase the size */
+      color: #ccc;
+      cursor: pointer;
+      position: relative;
+    }
+    .star-rating span::before {
+      content: '★';
+      color: #ffd700;
+      position: absolute;
+      opacity: 0;
+      transition: opacity 0.2s;
+    }
+    .star-rating:hover span::before,
+    .star-rating.selected span::before {
+      opacity: 1;
+    }
+
+    /* Notes Section */
+    main #notes-section {
+      display: none; /* Hidden by default */
+      margin-top: 30px;
+      padding: 20px;
+      background-color: #f9f9f9;
+      border: 2px solid #ffdab9;
+      border-radius: 10px;
+      display: flex;
+      gap: 20px;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+    main #notes-section.active {
+      display: flex; /* Show when active */
+    }
+    #notes-section h2 {
+      text-align: center;
+      margin-bottom: 20px;
+      color: #ff6347;
+      width: 100%;
+    }
+    .note-group {
+      width: 100%;
+      max-width: 400px;
+      margin-bottom: 20px;
+    }
+    .note-group label {
+      display: block;
+      margin-bottom: 5px;
+      font-weight: bold;
+    }
+    .note-group textarea {
+      width: 100%;
+      height: 80px;
+      padding: 10px;
+      border-radius: 5px;
+      border: 1px solid #ccc;
+      resize: vertical;
+      font-size: 1em;
+    }
+
+    /* Responsive Design */
+    @media (max-width: 1024px) {
+      .progress-box {
+        max-width: 300px;
+        height: 100px; /* Adjusted height */
+      }
+    }
+
+    @media (max-width: 768px) {
+      #progress-container {
+        flex-direction: column;
+        align-items: center;
+      }
+      .progress-box {
+        width: 90%;
+        max-width: 400px;
+        height: 100px; /* Adjusted height */
+      }
+      table, th, td {
+        font-size: 0.9em;
+      }
+      button {
+        padding: 0.5em 1em;
+        font-size: 0.9em;
+      }
+      .points-level h3, #current-level {
+        font-size: 1em;
+      }
+      #spin-button {
+        font-size: 1em;
+        padding: 0.6em 1.2em;
+      }
+      #notes-section h2 {
+        font-size: 1.2em;
+      }
+      .note-group label, .note-group textarea, .star-rating {
+        font-size: 0.9em;
+      }
+      .percentage-labels {
+        flex-direction: column;
+        align-items: center;
+      }
+    }
+
+    @media (max-width: 480px) {
+      h1 {
+        font-size: 1.5em;
+      }
+      .date {
+        font-size: 1em;
+      }
+      .points-level h3, #current-level {
+        font-size: 0.9em;
+      }
+      .progress-box {
+        height: 80px; /* Further adjusted height */
+      }
+      #roulette-container {
+        max-width: 250px;
+      }
+      .wheel-pointer {
+        border-left: 10px solid transparent;
+        border-right: 10px solid transparent;
+        border-bottom: 20px solid #333;
+      }
+      .slice {
+        font-size: 0.9em;
+        padding: 3px;
+      }
+      #spin-button {
+        font-size: 1em;
+        padding: 0.5em 1em;
+      }
+      #notes-section h2 {
+        font-size: 1.2em;
+      }
+      .note-group label, .note-group textarea, .star-rating {
+        font-size: 0.9em;
+      }
+      #bedtime-button {
+        padding: 0.8em 1.5em;
+        font-size: 1em;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Landing Page -->
+  <div id="landing-page">
+    <button id="good-morning-button" aria-label="Good Morning">Good Morning</button>
+  </div>
+
+  <!-- Task Manager Page -->
+  <main id="pdf-content" style="display: none; width: 100%; max-width: 1200px; margin: 0 auto;">
+    <button id="reset-button" aria-label="Reset All Tasks">Reset All Tasks</button>
+    <div class="date" id="current-date" aria-live="polite"></div>
+    <h1>Daily Checklist for Deangelo</h1>
+
+    <section class="points-level" aria-label="Points and Levels">
+      <h3>Total Points: <span id="total-points">0</span>/100</h3>
+      <h3 id="current-level">Level: 1</h3>
+    </section>
+
+    <section style="overflow-x:auto;">
+      <table aria-label="Task Table">
+        <thead>
+          <tr>
+            <th>Task Name</th>
+            <th>Start Time</th>
+            <th>End Time</th>
+            <th>Status</th>
+            <th>Points</th>
+          </tr>
+        </thead>
+        <tbody id="task-table-body">
+          <!-- Tasks will be dynamically inserted here -->
+        </tbody>
+      </table>
+    </section>
+
+    <!-- Bedtime Button -->
+    <section id="bedtime-container">
+      <button id="bedtime-button" disabled aria-label="Bedtime">Bedtime</button>
+    </section>
+
+    <div id="encouragement-message" role="alert" aria-live="assertive"></div>
+
+    <!-- Progress Bars -->
+    <section id="progress-container" aria-label="Progress Indicators">
+      <div class="progress-box">
+        <h3>Task Completion (%)</h3>
+        <div class="progress-bar" aria-label="Task Completion Progress">
+          <div class="progress-fill" id="completion-progress"></div>
+        </div>
+        <div class="progress-label" id="completion-label">0%</div>
+      </div>
+      <div class="progress-box">
+        <h3>Points Achieved (%)</h3>
+        <div class="progress-bar" aria-label="Points Achieved Progress">
+          <div class="progress-fill" id="points-progress"></div>
+        </div>
+        <div class="progress-label" id="points-label">0%</div>
+      </div>
+    </section>
+
+    <!-- WINNING MESSAGE -->
+    <div id="winning-message" role="status" aria-live="polite"></div>
+
+    <!-- ROULETTE -->
+    <section id="roulette-container" aria-label="Reward Roulette">
+      <h2>Congratulations! Spin the Wheel</h2>
+      <div class="wheel-wrapper">
+        <!-- The pointer is above the wheel -->
+        <div class="wheel-pointer" aria-hidden="true"></div>
+        <!-- The actual wheel -->
+        <div id="roulette-wheel">
+          <div class="slice slice1" id="slice1">15 min</div>
+          <div class="slice slice2" id="slice2">30 min</div>
+          <div class="slice slice3" id="slice3">45 min</div>
+          <div class="slice slice4" id="slice4">60 min</div>
+        </div>
+      </div>
+      <button id="spin-button" aria-label="Spin the Wheel">Spin!</button>
+    </section>
+
+    <!-- Export Buttons -->
+    <section class="export-buttons" aria-label="Export Options">
+      <button class="blue-button" id="export-text-button" aria-label="Export Progress as Text">Export Progress (Text)</button>
+      <button class="blue-button" id="export-pdf-button" aria-label="Export as PDF">Export as PDF</button>
+      <button class="blue-button" id="export-csv-button" aria-label="Download CSV">Download CSV</button>
+    </section>
+
+    <!-- Notes Section for Parents -->
+    <section id="notes-section" aria-labelledby="notes-heading">
+      <h2 id="notes-heading">Parent's Notes</h2>
+      <div id="parent-notes-container">
+        <div class="note-group">
+          <label for="global-good-remarks">Good Remarks:</label>
+          <textarea id="global-good-remarks" placeholder="Good Remarks" aria-label="Good Remarks"></textarea>
+          <div class="star-rating" data-type="good" aria-label="Good Rating">
+            <span role="button" tabindex="0" aria-label="1 Star">&#9733;</span>
+            <span role="button" tabindex="0" aria-label="2 Stars">&#9733;</span>
+            <span role="button" tabindex="0" aria-label="3 Stars">&#9733;</span>
+            <span role="button" tabindex="0" aria-label="4 Stars">&#9733;</span>
+            <span role="button" tabindex="0" aria-label="5 Stars">&#9733;</span>
+            <span role="button" tabindex="0" aria-label="6 Stars">&#9733;</span>
+          </div>
+        </div>
+        <div class="note-group">
+          <label for="global-bad-remarks">Bad Remarks:</label>
+          <textarea id="global-bad-remarks" placeholder="Bad Remarks" aria-label="Bad Remarks"></textarea>
+          <div class="star-rating" data-type="bad" aria-label="Bad Rating">
+            <span role="button" tabindex="0" aria-label="1 Star">&#9733;</span>
+            <span role="button" tabindex="0" aria-label="2 Stars">&#9733;</span>
+            <span role="button" tabindex="0" aria-label="3 Stars">&#9733;</span>
+            <span role="button" tabindex="0" aria-label="4 Stars">&#9733;</span>
+            <span role="button" tabindex="0" aria-label="5 Stars">&#9733;</span>
+            <span role="button" tabindex="0" aria-label="6 Stars">&#9733;</span>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Scripts -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.4.0/jspdf.umd.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
+
+  <script>
+    (function() {
+      // Define Tasks with Icons and Timers
+      const tasks = [
+        { name: "Morning Teeth Brushing", points: 20, icon: "🪥", minTime: 60, maxTime: 120 }, // 1-2 min
+        { name: "Taking a Bath", points: 20, icon: "🛁", minTime: 300, maxTime: 900 }, // 5-15 min, up to 30 min
+        { name: "Homework and Study Time", points: 20, icon: "📚", minTime: 0, maxTime: 0 }, // No timer
+        { name: "Eating on Time", points: 20, icon: "🍽️", minTime: 0, maxTime: 0 }, // No timer
+        { name: "Brushing Teeth Before Bed", points: 20, icon: "🪥", minTime: 60, maxTime: 120 }, // 1-2 min
+      ];
+
+      let taskData = [];
+      let winningMinutes = null; // To store the latest winning minutes
+      let globalGoodRemarks = "";
+      let globalBadRemarks = "";
+      let globalGoodRating = 0;
+      let globalBadRating = 0;
+
+      // Adjusted Levels to Align with Total Points (0-25, 26-50, 51-75, 76-100)
+      const levels = [
+        { level: 1, minPoints: 0, maxPoints: 25 },
+        { level: 2, minPoints: 26, maxPoints: 50 },
+        { level: 3, minPoints: 51, maxPoints: 75 },
+        { level: 4, minPoints: 76, maxPoints: 100 }
+      ];
+
+      const totalPointsEl = document.getElementById("total-points");
+      const taskTableBody = document.getElementById("task-table-body");
+      const encouragementMessage = document.getElementById("encouragement-message");
+      const parentNotesContainer = document.getElementById("parent-notes-container");
+
+      // Four possible "wins"
+      let increments = [15, 30, 45, 60];
+
+      // Function to get rating word for a percentage
+      function getRating(percentage) {
+        if (percentage >= 100) return "Excellent";
+        if (percentage >= 76)  return "Good";
+        if (percentage >= 51)  return "Need Work";
+        return "Poor";
+      }
+
+      // Display current date
+      function displayCurrentDate() {
+        const dateEl = document.getElementById("current-date");
+        const today = new Date();
+        const options = { weekday: "long", year: "numeric", month: "long", day: "numeric" };
+        dateEl.textContent = today.toLocaleDateString("en-US", options);
+      }
+
+      // Initialize tasks with localStorage
+      function initializeTasks() {
+        const savedData = localStorage.getItem("taskData");
+        if (savedData) {
+          taskData = JSON.parse(savedData);
+        } else {
+          taskData = tasks.map(task => ({
+            ...task,
+            startTime: "",
+            endTime: "",
+            status: "Pending",
+            completed: false,
+            canEnd: false,
+            elapsedSeconds: 0,
+            startMilliseconds: null,
+            timerInterval: null
+          }));
+        }
+
+        // Load global notes and ratings
+        const savedNotes = localStorage.getItem("globalNotes");
+        if (savedNotes) {
+          const { goodRemarks, badRemarks, goodRating, badRating } = JSON.parse(savedNotes);
+          globalGoodRemarks = goodRemarks;
+          globalBadRemarks = badRemarks;
+          globalGoodRating = goodRating;
+          globalBadRating = badRating;
+        }
+
+        // Initialize bedtimeData if not present
+        if (!taskData.bedtimeData) {
+          taskData.bedtimeData = [];
+        }
+
+        renderTasks();
+        renderParentNotes(); // Ensure Parent's Notes are rendered without placeholders
+
+        // Hide the roulette from previous attempts
+        document.getElementById("roulette-container").style.display = "none";
+        document.getElementById("winning-message").style.display = "none";
+        document.getElementById("spin-button").disabled = false;
+        const wheel = document.getElementById("roulette-wheel");
+        wheel.style.transform = "rotate(0deg)";
+        clearWinningSlice();
+
+        // Check if all tasks are completed to enable Bedtime button
+        checkAllTasksCompleted();
+      }
+
+      // Render Tasks
+      function renderTasks() {
+        taskTableBody.innerHTML = "";
+        let totalPoints = 0;
+
+        taskData.forEach((task, index) => {
+          const row = document.createElement("tr");
+          row.id = `task-row-${index}`;
+
+          // Determine if Start button should be enabled
+          let isStartEnabled = false;
+          if (index === 0) {
+            // First task
+            isStartEnabled = !task.completed;
+          } else {
+            // Subsequent tasks: enabled only if all previous tasks are completed
+            const previousTasksCompleted = taskData.slice(0, index).every(t => t.completed);
+            isStartEnabled = previousTasksCompleted && !task.completed;
+          }
+
+          // Create Start Button HTML
+          let startButtonHTML = '';
+          if (!task.completed) {
+            startButtonHTML = `<button class="start-button" onclick="window.recordStart(${index})" ${!isStartEnabled ? "disabled" : ""} aria-label="Start ${task.name}">Start</button>`;
+          } else {
+            startButtonHTML = `<span>Started</span>`;
+          }
+
+          // Create End Button HTML
+          let endButtonHTML = '';
+          if (!task.completed) {
+            endButtonHTML = `<button class="end-button" onclick="window.recordEnd(${index})" ${!task.canEnd ? "disabled" : ""} aria-label="End ${task.name}">End</button>`;
+          } else {
+            endButtonHTML = `<span>Completed</span>`;
+          }
+
+          row.innerHTML = `
+            <td>${task.icon} ${task.name}</td>
+            <td>
+              ${task.startTime || startButtonHTML}
+            </td>
+            <td>
+              ${task.endTime || endButtonHTML}
+            </td>
+            <td>${task.status}</td>
+            <td>
+              ${calculatePoints(task)}
+              ${task.minTime > 0 ? `<div id="timer-${index}"></div>` : ''}
+            </td>
+          `;
+          taskTableBody.appendChild(row);
+
+          // Update total points
+          totalPoints += calculatePoints(task);
+        });
+
+        totalPointsEl.textContent = totalPoints;
+        updateLevel(totalPoints);
+        updateProgressBars(totalPoints);
+        saveTaskData();
+      }
+
+      // Render Parent Notes Section
+      function renderParentNotes() {
+        parentNotesContainer.innerHTML = `
+          <div class="note-group">
+            <label for="global-good-remarks">Good Remarks:</label>
+            <textarea id="global-good-remarks" placeholder="Good Remarks" aria-label="Good Remarks">${globalGoodRemarks}</textarea>
+            <div class="star-rating" data-type="good" aria-label="Good Rating">
+              <span role="button" tabindex="0" aria-label="1 Star">&#9733;</span>
+              <span role="button" tabindex="0" aria-label="2 Stars">&#9733;</span>
+              <span role="button" tabindex="0" aria-label="3 Stars">&#9733;</span>
+              <span role="button" tabindex="0" aria-label="4 Stars">&#9733;</span>
+              <span role="button" tabindex="0" aria-label="5 Stars">&#9733;</span>
+              <span role="button" tabindex="0" aria-label="6 Stars">&#9733;</span>
+            </div>
+          </div>
+          <div class="note-group">
+            <label for="global-bad-remarks">Bad Remarks:</label>
+            <textarea id="global-bad-remarks" placeholder="Bad Remarks" aria-label="Bad Remarks">${globalBadRemarks}</textarea>
+            <div class="star-rating" data-type="bad" aria-label="Bad Rating">
+              <span role="button" tabindex="0" aria-label="1 Star">&#9733;</span>
+              <span role="button" tabindex="0" aria-label="2 Stars">&#9733;</span>
+              <span role="button" tabindex="0" aria-label="3 Stars">&#9733;</span>
+              <span role="button" tabindex="0" aria-label="4 Stars">&#9733;</span>
+              <span role="button" tabindex="0" aria-label="5 Stars">&#9733;</span>
+              <span role="button" tabindex="0" aria-label="6 Stars">&#9733;</span>
+            </div>
+          </div>
+        `;
+        // Initialize Star Ratings for Global Notes
+        initializeGlobalStarRatings();
+      }
+
+      // Record Start Time
+      window.recordStart = function(index) {
+        const now = new Date();
+        taskData[index].startTime = now.toLocaleTimeString();
+        taskData[index].startMilliseconds = now.getTime();
+        taskData[index].canEnd = true;
+        renderTasks();
+
+        // Start Timer
+        startTimer(index);
+      };
+
+      // Record End Time
+      window.recordEnd = function(index) {
+        if (!taskData[index].canEnd) {
+          alert("You need to start the task before ending it.");
+          return;
+        }
+        const now = new Date();
+        const elapsedSeconds = Math.round((now.getTime() - taskData[index].startMilliseconds) / 1000);
+        taskData[index].endTime = now.toLocaleTimeString();
+        taskData[index].elapsedSeconds = elapsedSeconds;
+        taskData[index].status = "Complete";
+        taskData[index].completed = true;
+        taskData[index].canEnd = false;
+
+        // Clear Timer Display
+        const row = document.getElementById(`task-row-${index}`);
+        const timerDisplay = row.querySelector(`#timer-${index}`);
+        if (timerDisplay) {
+          timerDisplay.remove();
+        }
+
+        // Clear Interval
+        if (taskData[index].timerInterval) {
+          clearInterval(taskData[index].timerInterval);
+          taskData[index].timerInterval = null;
+        }
+
+        showEncouragement(taskData[index].name);
+        renderTasks();
+        checkAllTasksCompleted();
+        checkNextTask(index);
+      };
+
+      // Show Encouragement Message
+      function showEncouragement(taskName) {
+        encouragementMessage.textContent = `Great job on ${taskName}! 🎉`;
+        encouragementMessage.style.display = "block";
+        setTimeout(() => {
+          encouragementMessage.style.display = "none";
+        }, 3000);
+      }
+
+      // Points Calculation
+      function calculatePoints(task) {
+        if (!task.completed) return 0;
+        if (task.minTime > 0) {
+          if (task.name.toLowerCase().includes("teeth brushing")) {
+            // Teeth Brushing: 1-2 minutes
+            if (task.elapsedSeconds >= task.maxTime) return task.points;
+            if (task.elapsedSeconds >= task.minTime) {
+              // Calculate proportion of time
+              const proportion = (task.elapsedSeconds - task.minTime) / (task.maxTime - task.minTime);
+              return Math.round(task.points * proportion);
+            }
+            return 0;
+          } else if (task.name.toLowerCase().includes("taking a bath")) {
+            // Taking a Bath: 5-15 minutes, up to 30 minutes
+            if (task.elapsedSeconds >= task.maxTime) return task.points;
+            if (task.elapsedSeconds >= task.minTime) {
+              const proportion = (task.elapsedSeconds - task.minTime) / (task.maxTime - task.minTime);
+              return Math.round(task.points * proportion);
+            }
+            return 0;
+          }
+          // Add more timed tasks here if needed
+        }
+        return task.points;
+      }
+
+      // Update Level
+      function updateLevel(totalPoints) {
+        let currentLevel = 1;
+        levels.forEach(l => {
+          if (totalPoints >= l.minPoints && totalPoints <= l.maxPoints) {
+            currentLevel = l.level;
+          }
+        });
+        document.getElementById("current-level").textContent = `Level: ${currentLevel}`;
+        // Levels are dynamically calculated based on total points, which persist via localStorage
+      }
+
+      // Update Progress Bars
+      function updateProgressBars(totalPoints) {
+        // Calculate Maximum Points Dynamically
+        const maxPoints = tasks.reduce((sum, task) => sum + task.points, 0);
+
+        // Completion stats
+        const totalTasks = taskData.length;
+        const completedTasks = taskData.filter(task => task.completed).length;
+        const completedPercentage = Math.round((completedTasks / totalTasks) * 100);
+
+        // Points stats
+        const pointsPercentage = Math.min(Math.round((totalPoints / maxPoints) * 100), 100);
+
+        // Update Progress Bars
+        const completionFill = document.getElementById("completion-progress");
+        const pointsFill = document.getElementById("points-progress");
+        const completionLabel = document.getElementById("completion-label");
+        const pointsLabel = document.getElementById("points-label");
+
+        completionFill.style.width = `${completedPercentage}%`;
+        completionLabel.textContent = `${completedPercentage}%`;
+
+        pointsFill.style.width = `${pointsPercentage}%`;
+        pointsLabel.textContent = `${pointsPercentage}%`;
+
+        // Check if we should show the roulette
+        const completionRating = getRating(completedPercentage);
+        const pointsRating = getRating(pointsPercentage);
+        maybeShowRoulette(completionRating, pointsRating);
+      }
+
+      // Show Encouragement and Possibly Roulette
+      function maybeShowRoulette(completionRating, pointsRating) {
+        if (completionRating === "Excellent" && pointsRating === "Excellent" && !winningMinutes) {
+          // Show the roulette container
+          document.getElementById("roulette-container").style.display = "block";
+
+          // Shuffle the increments so each slice is random
+          shuffleArray(increments);
+
+          // Assign each slice's text
+          document.getElementById("slice1").textContent = `${increments[0]} min`;
+          document.getElementById("slice2").textContent = `${increments[1]} min`;
+          document.getElementById("slice3").textContent = `${increments[2]} min`;
+          document.getElementById("slice4").textContent = `${increments[3]} min`;
+
+          // Position each slice at 0°, 90°, 180°, 270°
+          const slices = [
+            { el: document.getElementById("slice1"), angle:   0 },
+            { el: document.getElementById("slice2"), angle:  90 },
+            { el: document.getElementById("slice3"), angle: 180 },
+            { el: document.getElementById("slice4"), angle: 270 }
+          ];
+          slices.forEach(s => {
+            s.el.style.transform = `rotate(${s.angle}deg) translate(-100%, -100%)`;
+          });
+
+          // Listen for transitionend to detect final angle
+          const wheel = document.getElementById("roulette-wheel");
+          wheel.addEventListener('transitionend', onSpinEnd, { once: true });
+        }
+      }
+
+      // Spin the wheel
+      function spinRoulette() {
+        const wheel = document.getElementById("roulette-wheel");
+        // Disable the button during spin
+        document.getElementById("spin-button").disabled = true;
+
+        // Random Angle: 6 full spins + random offset
+        const randomAngle = 360 * 6 + Math.floor(Math.random() * 360);
+        wheel.style.transform = `rotate(${randomAngle}deg)`;
+      }
+
+      // After the spin finishes, figure out the winning slice
+      function onSpinEnd() {
+        const wheel = document.getElementById("roulette-wheel");
+        const transformVal = wheel.style.transform; // e.g. "rotate(2528deg)"
+        const match = transformVal.match(/rotate\(([-0-9.]+)deg\)/);
+        if(!match) return;
+        const finalAngle = parseFloat(match[1]) % 360; // remainder 0..359
+
+        // 4 quadrants: slice1 => 0..90, slice2 => 90..180, slice3 => 180..270, slice4 => 270..360
+        let sliceIndex = 0;
+        if (finalAngle >= 90 && finalAngle < 180) sliceIndex = 1;
+        else if (finalAngle >= 180 && finalAngle < 270) sliceIndex = 2;
+        else if (finalAngle >= 270) sliceIndex = 3;
+
+        // increments[] was shuffled; slice i has increments[i]
+        winningMinutes = increments[sliceIndex];
+
+        // Highlight the winning slice
+        highlightWinningSlice(sliceIndex + 1); // Slices are 1-indexed
+
+        // Show winning message
+        const msg = document.getElementById("winning-message");
+        msg.style.display = "block";
+        msg.textContent = `You won ${winningMinutes} minutes! Keep it up and you'll keep winning. 🎁`;
+
+        // Re-enable the spin button
+        document.getElementById("spin-button").disabled = false;
+      }
+
+      // Highlight the winning slice
+      function highlightWinningSlice(sliceNumber) {
+        // Remove existing highlights
+        for (let i = 1; i <=4; i++) {
+          document.getElementById(`slice${i}`).classList.remove("winning-slice");
+        }
+        // Add highlight to the winning slice
+        document.getElementById(`slice${sliceNumber}`).classList.add("winning-slice");
+      }
+
+      // Clear previous winning slice highlight
+      function clearWinningSlice() {
+        for (let i = 1; i <=4; i++) {
+          document.getElementById(`slice${i}`).classList.remove("winning-slice");
+        }
+        winningMinutes = null;
+      }
+
+      // Simple array shuffle
+      function shuffleArray(arr) {
+        for (let i = arr.length - 1; i > 0; i--) {
+          const j = Math.floor(Math.random() * (i + 1));
+          [arr[i], arr[j]] = [arr[j], arr[i]];
+        }
+      }
+
+      // Timer Function
+      function startTimer(index) {
+        const task = taskData[index];
+        if (task.minTime === 0 && task.maxTime === 0) return; // No timer for this task
+
+        const row = document.getElementById(`task-row-${index}`);
+        const pointsCell = row.querySelector('td:nth-child(5)');
+        const timerDisplay = document.createElement('div');
+        timerDisplay.id = `timer-${index}`;
+        timerDisplay.style.marginTop = '10px';
+        timerDisplay.style.fontWeight = 'bold';
+        timerDisplay.style.color = '#333';
+        pointsCell.appendChild(timerDisplay);
+
+        const interval = setInterval(() => {
+          const now = new Date();
+          const elapsedSeconds = Math.round((now.getTime() - task.startMilliseconds) / 1000);
+          timerDisplay.textContent = `Elapsed Time: ${formatTime(elapsedSeconds)}`;
+
+          if (elapsedSeconds >= task.minTime) {
+            const endButton = row.querySelector('.end-button');
+            endButton.disabled = false;
+          }
+
+          // **Removed** the code that disables the End button and stops the timer after maxTime
+          /*
+          if (task.maxTime > task.minTime && elapsedSeconds >= task.maxTime) {
+            const endButton = row.querySelector('.end-button');
+            endButton.disabled = true;
+            clearInterval(interval);
+            task.timerInterval = null;
+          }
+          */
+        }, 1000);
+
+        // Store interval ID to clear later if needed
+        taskData[index].timerInterval = interval;
+      }
+
+      // Format seconds to mm:ss
+      function formatTime(seconds) {
+        const mins = Math.floor(seconds / 60);
+        const secs = seconds % 60;
+        return `${mins}m ${secs}s`;
+      }
+
+      // Check Next Task
+      function checkNextTask(completedIndex) {
+        const nextIndex = completedIndex + 1;
+        if (nextIndex < taskData.length) {
+          const nextTask = taskData[nextIndex];
+          if (!nextTask.completed) {
+            // Optionally, highlight the next task or notify the user
+            alert(`Next task: ${nextTask.name}`);
+          }
+        } else {
+          // All tasks completed, Bedtime button becomes enabled
+          console.log("All tasks completed.");
+        }
+      }
+
+      // Check if all tasks are completed to enable Bedtime button
+      function checkAllTasksCompleted() {
+        const allCompleted = taskData.every(task => task.completed);
+        const bedtimeButton = document.getElementById("bedtime-button");
+        if (allCompleted) {
+          bedtimeButton.disabled = false;
+        } else {
+          bedtimeButton.disabled = true;
+        }
+      }
+
+      // Initialize Global Star Ratings
+      function initializeGlobalStarRatings() {
+        const starRatings = document.querySelectorAll('.star-rating');
+
+        starRatings.forEach(ratingDiv => {
+          const type = ratingDiv.getAttribute('data-type');
+          const currentRating = type === 'good' ? globalGoodRating : globalBadRating;
+
+          // Set initial star colors
+          highlightStars(ratingDiv, currentRating);
+
+          // Add event listeners
+          ratingDiv.querySelectorAll('span').forEach((star, index) => {
+            star.addEventListener('click', () => {
+              const selectedStars = index + 1;
+              if (type === "good") {
+                globalGoodRating = selectedStars;
+              } else if (type === "bad") {
+                globalBadRating = selectedStars;
+              }
+              highlightStars(ratingDiv, selectedStars);
+              saveGlobalNotes();
+            });
+
+            star.addEventListener('mouseover', () => {
+              highlightStars(ratingDiv, index + 1);
+            });
+
+            star.addEventListener('mouseout', () => {
+              const current = type === 'good' ? globalGoodRating : globalBadRating;
+              highlightStars(ratingDiv, current);
+            });
+          });
+        });
+      }
+
+      // Highlight Stars up to a certain number
+      function highlightStars(ratingDiv, num) {
+        ratingDiv.querySelectorAll('span').forEach((star, index) => {
+          if (index < num) {
+            star.style.color = '#ffd700';
+          } else {
+            star.style.color = '#ccc';
+          }
+        });
+      }
+
+      // Save Global Notes and Ratings to localStorage
+      function saveGlobalNotes() {
+        const goodRemarks = document.getElementById("global-good-remarks").value.trim();
+        const badRemarks = document.getElementById("global-bad-remarks").value.trim();
+
+        const notes = {
+          goodRemarks: goodRemarks || "",
+          badRemarks: badRemarks || "",
+          goodRating: globalGoodRating,
+          badRating: globalBadRating
+        };
+        localStorage.setItem("globalNotes", JSON.stringify(notes));
+
+        // Update the textarea values in case they were modified
+        document.getElementById("global-good-remarks").value = notes.goodRemarks;
+        document.getElementById("global-bad-remarks").value = notes.badRemarks;
+      }
+
+      // Export: TEXT
+      function exportText() {
+        const now = new Date();
+        let exportText = `Daily Checklist for Deangelo\n`;
+        exportText += `Date: ${now.toDateString()}\n`;
+        exportText += `Time: ${now.toLocaleTimeString()}\n\n`;
+
+        taskData.forEach(task => {
+          exportText += `Task: ${task.name}\n`;
+          exportText += `Start Time: ${task.startTime || "Not started"}\n`;
+          exportText += `End Time: ${task.endTime || "Not completed"}\n`;
+          exportText += `Elapsed Seconds: ${task.elapsedSeconds || 0}\n`;
+          exportText += `Points: ${calculatePoints(task)}\n\n`;
+        });
+
+        // Append Bedtime Actions
+        if (taskData.bedtimeData && taskData.bedtimeData.length > 0) {
+          exportText += `Bedtime Actions:\n`;
+          taskData.bedtimeData.forEach((action, index) => {
+            exportText += `${index + 1}. Time: ${action.timestamp}, Message: ${action.message}\n`;
+          });
+          exportText += `\n`;
+        }
+
+        exportText += `Parent's Good Remarks:\n${globalGoodRemarks || "None"}\n`;
+        exportText += `Parent's Good Rating: ${globalGoodRating} stars\n\n`;
+        exportText += `Parent's Bad Remarks:\n${globalBadRemarks || "None"}\n`;
+        exportText += `Parent's Bad Rating: ${globalBadRating} stars\n\n`;
+
+        if (winningMinutes) {
+          exportText += `Reward: ${winningMinutes} minutes\n\n`;
+        } else {
+          exportText += `Reward: No reward earned today.\n\n`;
+        }
+
+        const dataStr = "data:text/plain;charset=utf-8," + encodeURIComponent(exportText);
+        const downloadAnchor = document.createElement("a");
+        downloadAnchor.setAttribute("href", dataStr);
+        downloadAnchor.setAttribute("download", "task_progress.txt");
+        document.body.appendChild(downloadAnchor);
+        downloadAnchor.click();
+        downloadAnchor.remove();
+      }
+
+      // Export: CSV
+      function exportCSV() {
+        const now = new Date();
+        const titleRow = [
+          `Daily Checklist for Deangelo - ${now.toDateString()} - ${now.toLocaleTimeString()}`
+        ];
+        const headers = ["Task Name", "Start Time", "End Time", "Status", "Points"];
+
+        const rows = taskData.map(task => [
+          `"${task.name}"`,
+          `"${task.startTime || "Not started"}"`,
+          `"${task.endTime || "Not completed"}"`,
+          `"${task.status}"`,
+          `"${calculatePoints(task)}"`
+        ]);
+
+        // Add Reward row
+        if (winningMinutes) {
+          rows.push([`Reward`, ``, ``, ``, `${winningMinutes} minutes`]);
+        } else {
+          rows.push([`Reward`, ``, ``, ``, `No reward earned today.`]);
+        }
+
+        // Append Bedtime Actions
+        if (taskData.bedtimeData && taskData.bedtimeData.length > 0) {
+          rows.push([]);
+          rows.push([`Bedtime Actions`]);
+          rows.push([`Timestamp`, `Message`]);
+          taskData.bedtimeData.forEach(action => {
+            rows.push([`"${action.timestamp}"`, `"${action.message}"`]);
+          });
+        }
+
+        // Add Global Notes
+        rows.push([]);
+        rows.push([`Parent's Good Remarks:`, `"${globalGoodRemarks || "None"}"`]);
+        rows.push([`Parent's Good Rating:`, `${globalGoodRating} stars`]);
+        rows.push([`Parent's Bad Remarks:`, `"${globalBadRemarks || "None"}"`]);
+        rows.push([`Parent's Bad Rating:`, `${globalBadRating} stars`]);
+
+        let csvContent = [
+          titleRow.join(","),
+          "",
+          headers.join(","),
+          ...rows.map(row => row.join(","))
+        ].join("\n");
+
+        const dataStr = "data:text/csv;charset=utf-8," + encodeURIComponent(csvContent);
+        const downloadAnchor = document.createElement("a");
+        downloadAnchor.setAttribute("href", dataStr);
+        downloadAnchor.setAttribute("download", "task_progress.csv");
+        document.body.appendChild(downloadAnchor);
+        downloadAnchor.click();
+        downloadAnchor.remove();
+      }
+
+      // Export: PDF (entire page screenshot)
+function exportPDF() {
+  const { jsPDF } = window.jspdf;
+  const pdfContent = document.getElementById("pdf-content");
+
+  if (!pdfContent) {
+    alert("PDF content not found.");
+    return;
+  }
+
+  // Use a timeout to ensure elements are fully loaded before capture
+  setTimeout(() => {
+    html2canvas(pdfContent, {
+      scale: 2,
+      logging: true,
+      useCORS: true // Ensures external resources load
+    }).then(canvas => {
+      const pdf = new jsPDF("p", "pt", "letter");
+      const pageWidth = pdf.internal.pageSize.getWidth();
+      const margin = 10;
+      const imgWidth = pageWidth - margin * 2;
+      const imgHeight = (canvas.height / canvas.width) * imgWidth;
+
+      const imgData = canvas.toDataURL("image/png");
+      pdf.addImage(imgData, "PNG", margin, margin, imgWidth, imgHeight);
+      pdf.save("Deangelo_Checklist_Report.pdf");
+    }).catch(error => {
+      alert("An error occurred while generating the PDF. Try again.");
+      console.error("html2canvas error:", error);
+    });
+  }, 300);
+}
+
+      // Save Task Data to localStorage
+      function saveTaskData() {
+        localStorage.setItem("taskData", JSON.stringify(taskData));
+        // Save global notes
+        saveGlobalNotes();
+      }
+
+      // Reset button
+      function resetTasks() {
+        if (confirm("Are you sure you want to reset all tasks?")) {
+          // Clear all intervals
+          taskData.forEach(task => {
+            if (task.timerInterval) {
+              clearInterval(task.timerInterval);
+              task.timerInterval = null;
+            }
+          });
+
+          taskData = tasks.map(task => ({
+            ...task,
+            startTime: "",
+            endTime: "",
+            status: "Pending",
+            completed: false,
+            canEnd: false,
+            elapsedSeconds: 0,
+            startMilliseconds: null,
+            timerInterval: null
+          }));
+          taskData.bedtimeData = [];
+          totalPointsEl.textContent = "0";
+          document.getElementById("current-level").textContent = "Level: 1";
+          globalGoodRemarks = "";
+          globalBadRemarks = "";
+          globalGoodRating = 0;
+          globalBadRating = 0;
+          renderParentNotes();
+          clearWinningSlice();
+          renderTasks();
+          // Hide Parent's Notes if they were visible
+          document.getElementById("notes-section").classList.remove("active");
+          // Disable Bedtime button
+          document.getElementById("bedtime-button").disabled = true;
+          // Hide Roulette and Winning Message
+          document.getElementById("roulette-container").style.display = "none";
+          document.getElementById("winning-message").style.display = "none";
+        }
+      }
+
+      // Spin Roulette Button
+      function spinRouletteHandler() {
+        spinRoulette();
+      }
+
+      // Initialize on Load
+      document.addEventListener("DOMContentLoaded", () => {
+        displayCurrentDate();
+        initializeTasks();
+
+        // Event Listeners
+        document.getElementById("good-morning-button").addEventListener("click", () => {
+          document.getElementById("landing-page").style.display = "none";
+          document.getElementById("pdf-content").style.display = "block";
+        });
+
+        document.getElementById("reset-button").addEventListener("click", resetTasks);
+        document.getElementById("spin-button").addEventListener("click", spinRouletteHandler);
+
+        document.getElementById("export-text-button").addEventListener("click", exportText);
+        document.getElementById("export-csv-button").addEventListener("click", exportCSV);
+        document.getElementById("export-pdf-button").addEventListener("click", exportPDF);
+
+        const bedtimeButton = document.getElementById("bedtime-button");
+        if (bedtimeButton) {
+          bedtimeButton.addEventListener("click", handleBedtime);
+        }
+      });
+
+      // Star Rating Event Delegation for Accessibility (Keyboard Support)
+      document.addEventListener('keydown', function(event) {
+        if (event.target.matches('.star-rating span') && (event.key === 'Enter' || event.key === ' ')) {
+          event.preventDefault();
+          event.target.click();
+        }
+      });
+
+      // Handle Bedtime Button Click
+      function handleBedtime() {
+        const totalPoints = parseInt(document.getElementById("total-points").textContent);
+        let message = "";
+
+        if (totalPoints >= 0 && totalPoints <= 25) {
+          message = "Good effort! Keep up the good work!";
+        } else if (totalPoints >= 26 && totalPoints <= 50) {
+          message = "Great job! You're doing well!";
+        } else if (totalPoints >= 51 && totalPoints <= 75) {
+          message = "Excellent work! Almost there!";
+        } else if (totalPoints >= 76 && totalPoints <= 100) {
+          message = "Congratulations! You just earned the maximum points!";
+        } else {
+          message = "Keep striving for excellence!";
+        }
+
+        // Display the message
+        showBedtimeMessage(message);
+
+        // Record Bedtime Action
+        recordBedtimeAction(message);
+
+        // Show Parent's Notes
+        showParentNotes();
+      }
+
+      function showBedtimeMessage(message) {
+        const msgEl = document.createElement("div");
+        msgEl.id = "bedtime-message";
+        msgEl.textContent = message;
+        msgEl.style.position = "fixed";
+        msgEl.style.top = "20px";
+        msgEl.style.right = "20px";
+        msgEl.style.backgroundColor = "#ffeb3b";
+        msgEl.style.color = "#333";
+        msgEl.style.padding = "15px 25px";
+        msgEl.style.borderRadius = "10px";
+        msgEl.style.boxShadow = "0 4px 8px rgba(0, 0, 0, 0.2)";
+        msgEl.style.fontSize = "1.2em";
+        msgEl.style.zIndex = "1000";
+        document.body.appendChild(msgEl);
+
+        // Remove the message after 5 seconds
+        setTimeout(() => {
+          msgEl.remove();
+        }, 5000);
+      }
+
+      function showParentNotes() {
+        const notesSection = document.getElementById("notes-section");
+        if (!notesSection.classList.contains("active")) {
+          notesSection.classList.add("active");
+          // Scroll into view
+          notesSection.scrollIntoView({ behavior: 'smooth' });
+        }
+      }
+
+      function recordBedtimeAction(message) {
+        // Get current timestamp
+        const now = new Date();
+        const timestamp = now.toLocaleString();
+
+        // Push the bedtime action
+        taskData.bedtimeData.push({
+          timestamp: timestamp,
+          message: message
+        });
+
+        // Update localStorage
+        saveTaskData();
+      }
+
+    })();
+  </script>
+</body>
+</html>
